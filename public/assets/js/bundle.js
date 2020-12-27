@@ -13,12 +13,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_ValidatePassword__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/ ValidatePassword */ "./src/modules/ ValidatePassword.js");
 /* harmony import */ var _modules_Sign__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/Sign */ "./src/modules/Sign.js");
 /* harmony import */ var _modules_Login__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/Login */ "./src/modules/Login.js");
+/* harmony import */ var _modules_Users__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/Users */ "./src/modules/Users.js");
+
 
 
 
 
 var btnSign = document.querySelector('#btnSign');
 var btnLogin = document.querySelector('#btnLogin');
+var root = document.querySelector('#root');
+
+if (root) {
+  (0,_modules_Users__WEBPACK_IMPORTED_MODULE_4__.default)(root);
+}
 
 if (btnSign) {
   btnSign.addEventListener('click', function (event) {
@@ -112,20 +119,17 @@ function Login(Email, Password) {
       if (resp.status) {
         var token = resp.data.token;
         localStorage.setItem('token', token);
-        axiosConfig.headers.Authorization = "bearer ".concat(localStorage.getItem('token'));
-        alert('Usuário Logado!!');
-        document.location.reload(false);
+        axiosConfig.headers.Authorization = "bearer ".concat(localStorage.getItem('token')); // alert('Usuário Logado!!');
+
+        window.location.href = "index.html";
       } else {
-        alert('Senha ou Email icorreto!!!');
-        document.location.reload(false);
+        alert('Senha ou Email incorreto!!!'); // document.location.reload(false);
       }
     })["catch"](function (err) {
-      alert('Erro ao Logar');
-      document.location.reload(false);
+      alert('Erro ao Logar'); // document.location.reload(false);
     });
   } else {
-    alert('Senha ou Email Vazios');
-    document.location.reload(false);
+    alert('Senha ou Email Vazios'); // document.location.reload(false);
   }
 }
 
@@ -160,19 +164,91 @@ function Sign(Name, mail, password) {
     }, axiosConfig).then(function (result) {
       if (result.status == 200) {
         alert("".concat(result.data.user.name, " usu\xE1rio adicionado com sucesso"));
-        document.location.reload(false);
+        window.location.href = "login.html";
       } else {
-        alert('Erro ao cadastrar!!');
-        document.location.reload(false);
+        alert('Erro ao cadastrar!!'); // document.location.reload(false);
       }
     })["catch"](function (err) {
-      alert('Erro ao cadastrar!!');
-      document.location.reload(false);
+      alert('Erro ao cadastrar!!'); // document.location.reload(false);
     });
   } else {
-    alert('Senhas diferentes ou Email inválido!!');
-    document.location.reload(false);
+    alert('Senhas diferentes ou Email inválido!!'); // document.location.reload(false);
   }
+}
+
+/***/ }),
+
+/***/ "./src/modules/Users.js":
+/*!******************************!*\
+  !*** ./src/modules/Users.js ***!
+  \******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => /* binding */ Users
+/* harmony export */ });
+var axiosConfig = {
+  headers: {
+    Authorization: "bearer ".concat(localStorage.getItem('token') || '')
+  }
+};
+function Users(root) {
+  var nameUser = document.createElement('h1');
+  var textUser = document.createElement('h3');
+  var table = document.createElement('table');
+  var thead = document.createElement('thead');
+  var tbody = document.createElement('tbody');
+  var hr = document.createElement('hr');
+  nameUser.classList.add('text-info');
+  nameUser.classList.add('mt-4');
+  table.classList.add('table');
+  var nameTh = document.createElement('th');
+  var yearTh = document.createElement('th');
+  var idTh = document.createElement('th');
+  var createTh = document.createElement('th');
+  thead.appendChild(idTh);
+  thead.appendChild(nameTh);
+  thead.appendChild(yearTh);
+  thead.appendChild(createTh);
+  idTh.innerHTML = 'ID';
+  nameTh.innerHTML = 'Name';
+  yearTh.innerHTML = 'Year';
+  createTh.innerHTML = 'Create';
+  table.appendChild(thead);
+  table.appendChild(tbody);
+  root.appendChild(nameUser);
+  root.appendChild(hr);
+  root.appendChild(textUser);
+  root.appendChild(table);
+  axios('http://localhost:3000/users', axiosConfig).then(function (result) {
+    if (result.status == 200) {
+      var datas = result.data.data;
+      var user = result.data.user;
+      nameUser.innerHTML = user.name;
+      textUser.innerHTML = 'Users';
+      datas.forEach(function (element) {
+        var tr = document.createElement('tr');
+        var id = document.createElement('td');
+        var name = document.createElement('td');
+        var year = document.createElement('td');
+        var create = document.createElement('td');
+        id.innerHTML = element.id;
+        name.innerHTML = element.name;
+        year.innerHTML = element.year;
+        create.innerHTML = element.create;
+        tr.appendChild(id);
+        tr.appendChild(name);
+        tr.appendChild(year);
+        tr.appendChild(create);
+        tbody.appendChild(tr);
+      });
+    } else {
+      nameUser.innerHTML = 'Precisa fazer o login!';
+    }
+  })["catch"](function (err) {
+    nameUser.innerHTML = 'Erro no Servidor';
+  });
 }
 
 /***/ }),
