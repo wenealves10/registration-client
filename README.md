@@ -1,2 +1,2 @@
-# Registration-client
-front end of the user registration application
+# Registration-client.
+front end of the user registration application.
