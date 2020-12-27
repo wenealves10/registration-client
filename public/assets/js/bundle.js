@@ -3,19 +3,215 @@
 /******/ 	var __webpack_modules__ = ({
 
 /***/ "./src/index.js":
-/*!**********************!*
+/*!**********************!*\
   !*** ./src/index.js ***!
   \**********************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _assets_css_styles_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./assets/css/styles.css */ "./src/assets/css/styles.css");
+/* harmony import */ var _modules_ValidatePassword__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/ ValidatePassword */ "./src/modules/ ValidatePassword.js");
+/* harmony import */ var _modules_Sign__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/Sign */ "./src/modules/Sign.js");
+/* harmony import */ var _modules_Login__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/Login */ "./src/modules/Login.js");
 
+
+
+
+var btnSign = document.querySelector('#btnSign');
+var btnLogin = document.querySelector('#btnLogin');
+
+if (btnSign) {
+  btnSign.addEventListener('click', function (event) {
+    var validatePassword = (0,_modules_ValidatePassword__WEBPACK_IMPORTED_MODULE_1__.default)('#passwordUser', '#passwordConfirm');
+    (0,_modules_Sign__WEBPACK_IMPORTED_MODULE_2__.default)('#nameUser', '#emailUser', validatePassword);
+  });
+}
+
+if (btnLogin) {
+  btnLogin.addEventListener('click', function (event) {
+    (0,_modules_Login__WEBPACK_IMPORTED_MODULE_3__.default)('#emailLogin', '#passwordLogin');
+    alert('Reload');
+  });
+}
+
+/***/ }),
+
+/***/ "./src/modules/ ValidatePassword.js":
+/*!******************************************!*\
+  !*** ./src/modules/ ValidatePassword.js ***!
+  \******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => /* binding */ ValidatePassword,
+/* harmony export */   "ValidateLogin": () => /* binding */ ValidateLogin
+/* harmony export */ });
+function ValidatePassword(password1, password2) {
+  var password = document.querySelector(password1);
+  var passwordConfirm = document.querySelector(password2);
+
+  if (password.value != passwordConfirm.value) {
+    password.value = '';
+    passwordConfirm.value = '';
+    passwordConfirm.style.borderColor = '#f00';
+    return false;
+  } else {
+    if (password.value.length >= 8 && password.value.length <= 16) {
+      passwordConfirm.value = '';
+      passwordConfirm.style.borderColor = '#0f0';
+      return password.value;
+    } else {
+      password.value = '';
+      passwordConfirm.value = '';
+      passwordConfirm.style.borderColor = '#f00';
+      return false;
+    }
+  }
+}
+function ValidateLogin(password) {
+  var pswd = document.querySelector(password).value;
+
+  if (pswd.length >= 4 && pswd.length <= 16) {
+    return pswd;
+  } else {
+    return false;
+  }
+}
+
+/***/ }),
+
+/***/ "./src/modules/Login.js":
+/*!******************************!*\
+  !*** ./src/modules/Login.js ***!
+  \******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => /* binding */ Login
+/* harmony export */ });
+/* harmony import */ var _ValidateEmailName__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ValidateEmailName */ "./src/modules/ValidateEmailName.js");
+/* harmony import */ var _ValidatePassword__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ ValidatePassword */ "./src/modules/ ValidatePassword.js");
+
+
+var axiosConfig = {
+  headers: {
+    Authorization: "bearer ".concat(localStorage.getItem('token') || '')
+  }
+};
+function Login(Email, Password) {
+  var email = (0,_ValidateEmailName__WEBPACK_IMPORTED_MODULE_0__.ValidateEmail)(Email);
+  var password = (0,_ValidatePassword__WEBPACK_IMPORTED_MODULE_1__.ValidateLogin)(Password);
+
+  if (email != false && password != false) {
+    axios.post('http://localhost:3000/user/login', {
+      email: email,
+      password: password
+    }).then(function (resp) {
+      if (resp.status) {
+        var token = resp.data.token;
+        localStorage.setItem('token', token);
+        axiosConfig.headers.Authorization = "bearer ".concat(localStorage.getItem('token'));
+        alert('Usuário Logado!!');
+        document.location.reload(false);
+      } else {
+        alert('Senha ou Email icorreto!!!');
+        document.location.reload(false);
+      }
+    })["catch"](function (err) {
+      alert('Erro ao Logar');
+      document.location.reload(false);
+    });
+  } else {
+    alert('Senha ou Email Vazios');
+    document.location.reload(false);
+  }
+}
+
+/***/ }),
+
+/***/ "./src/modules/Sign.js":
+/*!*****************************!*\
+  !*** ./src/modules/Sign.js ***!
+  \*****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => /* binding */ Sign
+/* harmony export */ });
+/* harmony import */ var _ValidateEmailName__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ValidateEmailName */ "./src/modules/ValidateEmailName.js");
+
+var axiosConfig = {
+  headers: {
+    Authorization: "bearer ".concat(localStorage.getItem('token') || '')
+  }
+};
+function Sign(Name, mail, password) {
+  var email = (0,_ValidateEmailName__WEBPACK_IMPORTED_MODULE_0__.ValidateEmail)(mail);
+  var name = (0,_ValidateEmailName__WEBPACK_IMPORTED_MODULE_0__.ValidateName)(Name);
+
+  if (password != undefined && email != false && name != false) {
+    axios.post('http://localhost:3000/user/sign', {
+      name: name,
+      email: email,
+      password: password
+    }, axiosConfig).then(function (result) {
+      if (result.status == 200) {
+        alert("".concat(result.data.user.name, " usu\xE1rio adicionado com sucesso"));
+        document.location.reload(false);
+      } else {
+        alert('Erro ao cadastrar!!');
+        document.location.reload(false);
+      }
+    })["catch"](function (err) {
+      alert('Erro ao cadastrar!!');
+      document.location.reload(false);
+    });
+  } else {
+    alert('Senhas diferentes ou Email inválido!!');
+    document.location.reload(false);
+  }
+}
+
+/***/ }),
+
+/***/ "./src/modules/ValidateEmailName.js":
+/*!******************************************!*\
+  !*** ./src/modules/ValidateEmailName.js ***!
+  \******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "ValidateEmail": () => /* binding */ ValidateEmail,
+/* harmony export */   "ValidateName": () => /* binding */ ValidateName
+/* harmony export */ });
+function ValidateEmail(Email) {
+  var email = document.querySelector(Email).value;
+  var val = new RegExp(/^[A-Za-z0-9_\-\.]+@[A-Za-z0-9_\-\.]{2,}\.[A-Za-z0-9]{2,}(\.[A-Za-z0-9])?/);
+
+  if (email != '' && val.test(email)) {
+    return email;
+  } else {
+    return false;
+  }
+}
+function ValidateName(Name) {
+  var name = document.querySelector(Name).value;
+
+  if (name != '' && name != ' ' && name != undefined && isNaN(name)) {
+    return name;
+  } else {
+    return false;
+  }
+}
 
 /***/ }),
 
 /***/ "./node_modules/css-loader/dist/cjs.js!./src/assets/css/styles.css":
-/*!*************************************************************************!*
+/*!*************************************************************************!*\
   !*** ./node_modules/css-loader/dist/cjs.js!./src/assets/css/styles.css ***!
   \*************************************************************************/
 /***/ ((module, __webpack_exports__, __webpack_require__) => {
@@ -41,7 +237,7 @@ ___CSS_LOADER_EXPORT___.push([module.id, "*{\r\n    margin: 0;\r\n    padding: 0
 /***/ }),
 
 /***/ "./node_modules/css-loader/dist/runtime/api.js":
-/*!*****************************************************!*
+/*!*****************************************************!*\
   !*** ./node_modules/css-loader/dist/runtime/api.js ***!
   \*****************************************************/
 /***/ ((module) => {
@@ -116,7 +312,7 @@ module.exports = function (cssWithMappingToString) {
 /***/ }),
 
 /***/ "./node_modules/css-loader/dist/runtime/cssWithMappingToString.js":
-/*!************************************************************************!*
+/*!************************************************************************!*\
   !*** ./node_modules/css-loader/dist/runtime/cssWithMappingToString.js ***!
   \************************************************************************/
 /***/ ((module) => {
@@ -157,7 +353,7 @@ module.exports = function cssWithMappingToString(item) {
 /***/ }),
 
 /***/ "./src/assets/css/styles.css":
-/*!***********************************!*
+/*!***********************************!*\
   !*** ./src/assets/css/styles.css ***!
   \***********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
@@ -186,7 +382,7 @@ var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js
 /***/ }),
 
 /***/ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js":
-/*!****************************************************************************!*
+/*!****************************************************************************!*\
   !*** ./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js ***!
   \****************************************************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
