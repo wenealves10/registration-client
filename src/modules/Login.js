@@ -22,18 +22,18 @@ export default function Login(Email, Password) {
                 let token = resp.data.token;
                 localStorage.setItem('token', token);
                 axiosConfig.headers.Authorization = `bearer ${localStorage.getItem('token')}`;
-                alert('Usuário Logado!!');
-                document.location.reload(false);
+                // alert('Usuário Logado!!');
+                window.location.href = "index.html";
             } else {
-                alert('Senha ou Email icorreto!!!');
-                document.location.reload(false);
+                alert('Senha ou Email incorreto!!!');
+                // document.location.reload(false);
             }
         }).catch(err => {
             alert('Erro ao Logar');
-            document.location.reload(false);
+            // document.location.reload(false);
         })
     } else {
         alert('Senha ou Email Vazios');
-        document.location.reload(false);
+        // document.location.reload(false);
     }
 }
