@@ -17,17 +17,17 @@ export default function Sign(Name, mail, password) {
         },axiosConfig).then((result) => {
             if(result.status == 200){
                 alert(`${result.data.user.name} usuário adicionado com sucesso`);
-                document.location.reload(false);
+                window.location.href = "login.html";
             }else{
                 alert('Erro ao cadastrar!!');
-                document.location.reload(false);
+                // document.location.reload(false);
             }
         }).catch((err) => {
             alert('Erro ao cadastrar!!');
-            document.location.reload(false);
+            // document.location.reload(false);
         });
     }else{
         alert('Senhas diferentes ou Email inválido!!');
-        document.location.reload(false);
+        // document.location.reload(false);
     }  
 }
