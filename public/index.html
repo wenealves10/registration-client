@@ -23,6 +23,41 @@
     <div class="container text-center" id="root">
       
     </div>
+    <div class="container" id="createUpdate">
+      <div class="card mt-5">
+        <div class="card-header text-center">
+          <h3>Create User</h3>
+        </div>
+        <div class="card-body">
+          <label class="mt-1" for="userCreate"><strong>Nome</strong></label>
+        <input type="text" name="name" id="userCreate" placeholder="Digite o nome user...." class="form-control"
+          required />
+        <label class="mt-1" for="yearCreate"><strong>Idade</strong></label>
+        <input type="number" name="year" id="yearCreate" placeholder="18" class="form-control" required />
+        <button type="button" id="btnCreate"  class="btn btn-success w-100 mt-3">Cadastrar Usuários</button>
+        </div>
+      </div>
+    </div>
+    <div class="card mt-5">
+      <div class="card-header text-center">
+        <h3>Update User</h3>
+      </div>
+      <div class="card-body">
+        <label class="mt-1" for="idUpdate"><strong>ID</strong></label>
+        <input type="number" name="id" readonly id="idUpdate" placeholder="ID" class="form-control"
+        required />
+        <label class="mt-1" for="dataUpdate"><strong>USERID</strong></label>
+        <input type="number" name="data" readonly id="dataUpdate" placeholder="USERID" class="form-control"
+        required />
+        <label class="mt-1" for="userUpdate"><strong>Nome</strong></label>
+        <input type="text" name="name" id="userUpdate" placeholder="NOME" class="form-control"
+        required />
+      <label class="mt-1" for="yearUpdate"><strong>Idade</strong></label>
+      <input type="number" name="year" id="yearUpdate" placeholder="IDADE" class="form-control" required />
+      <button type="button" id="btnUpdate"  class="btn btn-success w-100 mt-3">Atualizar Usuários</button>
+      </div>
+    </div>
+  </div>
   </div>
 
 
