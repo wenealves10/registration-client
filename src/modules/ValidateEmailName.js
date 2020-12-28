@@ -6,7 +6,7 @@ export function ValidateEmail(Email) {
    }else{
        return false;
    }
-}
+} 
 
 export function ValidateName(Name){
     let name = document.querySelector(Name).value;

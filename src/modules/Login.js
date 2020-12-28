@@ -6,12 +6,12 @@ const axiosConfig = {
         Authorization: `bearer ${localStorage.getItem('token') || ''}`
     }
 }
-
+ 
 export default function Login(Email, Password) {
     const email = ValidateEmail(Email);
     const password = ValidateLogin(Password);
     if (email != false && password != false) {
-        axios.post('http://localhost:3000/user/login', {
+        axios.post('http://registration-api:3000/user/login', {
             email,
             password
         }).then(resp => {

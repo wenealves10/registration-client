@@ -11,7 +11,7 @@ let root = document.querySelector('#root');
 if (root) {
     Users(root);
 }
-
+ 
 if (btnSign) {
     btnSign.addEventListener('click', function (event) {
         const validatePassword = ValidatePassword('#passwordUser', '#passwordConfirm');

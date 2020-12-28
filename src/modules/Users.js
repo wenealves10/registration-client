@@ -23,7 +23,7 @@ export default function Users(root) {
     nameUser.classList.add('text-info');
     nameUser.classList.add('mt-4');
     table.classList.add('table');
-
+  
     // AppendChild
     thead.appendChild(idTh);
     thead.appendChild(nameTh);
@@ -44,7 +44,7 @@ export default function Users(root) {
     createTh.innerHTML = 'USERID';
     actionTh.innerHTML = 'Action';
 
-    axios('http://localhost:3000/users', axiosConfig)
+    axios('http://registration-api:3000/users', axiosConfig)
         .then(result => {
             if (result.status == 200) {
 
@@ -117,7 +117,7 @@ export default function Users(root) {
         function deleteUser(trUser) {
             let id = trUser.getAttribute('data-id')
             if (id != undefined && !isNaN(id)) {
-                axios.delete('http://localhost:3000/user/' + id, axiosConfig).then(response => {
+                axios.delete('http://registration-api:3000/user/' + id, axiosConfig).then(response => {
                     if (response.status == 200) {
                         alert('Apagado com Sucesso')
                         window.location.reload()
@@ -148,7 +148,7 @@ export default function Users(root) {
                     name,
                     year
                 }
-                axios.post('http://localhost:3000/user/create', users, axiosConfig).then(response => {
+                axios.post('http://registration-api:3000/user/create', users, axiosConfig).then(response => {
                     if (response.status == 200) {
                         alert('Enviado com sucesso!');
                         window.location.reload();
@@ -171,7 +171,7 @@ export default function Users(root) {
                 year
             }
 
-            axios.put('http://localhost:3000/user/' + id, users, axiosConfig).then(response => {
+            axios.put('http://registration-api:3000/user/' + id, users, axiosConfig).then(response => {
                 if (response.status == 200) {
                     alert('Atualizado com sucesso!');
                     window.location.reload();
