@@ -19,15 +19,15 @@ export default function Sign(Name, mail, password) {
                 alert(`${result.data.user.name} usuário adicionado com sucesso`);
                 window.location.href = "login.html";
             }else{
-                alert('Erro ao cadastrar!!');
-                // document.location.reload(false);
+                alert('Senhas diferentes ou Email inválido!!!');
+                window.location.reload();
             }
         }).catch((err) => {
             alert('Erro ao cadastrar!!');
-            // document.location.reload(false);
+            window.location.reload();
         });
     }else{
-        alert('Senhas diferentes ou Email inválido!!');
-        // document.location.reload(false);
+        alert('Email ou Senha Vazios');
+        window.location.reload();
     }  
 }
