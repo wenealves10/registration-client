@@ -22,6 +22,5 @@ if (btnSign) {
 if (btnLogin) {
     btnLogin.addEventListener('click', function (event) {
         Login('#emailLogin', '#passwordLogin');
-        alert('Reload');
     });
 }
