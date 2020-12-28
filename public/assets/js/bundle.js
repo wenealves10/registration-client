@@ -37,7 +37,6 @@ if (btnSign) {
 if (btnLogin) {
   btnLogin.addEventListener('click', function (event) {
     (0,_modules_Login__WEBPACK_IMPORTED_MODULE_3__.default)('#emailLogin', '#passwordLogin');
-    alert('Reload');
   });
 }
 
@@ -116,20 +115,19 @@ function Login(Email, Password) {
       email: email,
       password: password
     }).then(function (resp) {
-      if (resp.status) {
+      if (resp.status == 200) {
         var token = resp.data.token;
         localStorage.setItem('token', token);
-        axiosConfig.headers.Authorization = "bearer ".concat(localStorage.getItem('token')); // alert('Usuário Logado!!');
-
+        axiosConfig.headers.Authorization = "bearer ".concat(localStorage.getItem('token'));
         window.location.href = "index.html";
-      } else {
-        alert('Senha ou Email incorreto!!!'); // document.location.reload(false);
       }
     })["catch"](function (err) {
-      alert('Erro ao Logar'); // document.location.reload(false);
+      alert('Senha ou Email incorreto!!!');
+      window.location.reload();
     });
   } else {
-    alert('Senha ou Email Vazios'); // document.location.reload(false);
+    alert('Senha ou E-mail Vazios');
+    window.location.reload();
   }
 }
 
@@ -166,13 +164,16 @@ function Sign(Name, mail, password) {
         alert("".concat(result.data.user.name, " usu\xE1rio adicionado com sucesso"));
         window.location.href = "login.html";
       } else {
-        alert('Erro ao cadastrar!!'); // document.location.reload(false);
+        alert('Senhas diferentes ou Email inválido!!!');
+        window.location.reload();
       }
     })["catch"](function (err) {
-      alert('Erro ao cadastrar!!'); // document.location.reload(false);
+      alert('Erro ao cadastrar!!');
+      window.location.reload();
     });
   } else {
-    alert('Senhas diferentes ou Email inválido!!'); // document.location.reload(false);
+    alert('Email ou Senha Vazios');
+    window.location.reload();
   }
 }
 
@@ -194,33 +195,40 @@ var axiosConfig = {
   }
 };
 function Users(root) {
+  // created elements
   var nameUser = document.createElement('h1');
   var textUser = document.createElement('h3');
   var table = document.createElement('table');
   var thead = document.createElement('thead');
   var tbody = document.createElement('tbody');
   var hr = document.createElement('hr');
-  nameUser.classList.add('text-info');
-  nameUser.classList.add('mt-4');
-  table.classList.add('table');
   var nameTh = document.createElement('th');
   var yearTh = document.createElement('th');
   var idTh = document.createElement('th');
   var createTh = document.createElement('th');
+  var actionTh = document.createElement('th'); // atributos classes
+
+  nameUser.classList.add('text-info');
+  nameUser.classList.add('mt-4');
+  table.classList.add('table'); // AppendChild
+
   thead.appendChild(idTh);
   thead.appendChild(nameTh);
   thead.appendChild(yearTh);
   thead.appendChild(createTh);
-  idTh.innerHTML = 'ID';
-  nameTh.innerHTML = 'Name';
-  yearTh.innerHTML = 'Year';
-  createTh.innerHTML = 'Create';
+  thead.appendChild(actionTh);
   table.appendChild(thead);
   table.appendChild(tbody);
   root.appendChild(nameUser);
   root.appendChild(hr);
   root.appendChild(textUser);
-  root.appendChild(table);
+  root.appendChild(table); // InnerHtml
+
+  idTh.innerHTML = 'ID';
+  nameTh.innerHTML = 'Name';
+  yearTh.innerHTML = 'Year';
+  createTh.innerHTML = 'USERID';
+  actionTh.innerHTML = 'Action';
   axios('http://localhost:3000/users', axiosConfig).then(function (result) {
     if (result.status == 200) {
       var datas = result.data.data;
@@ -228,26 +236,124 @@ function Users(root) {
       nameUser.innerHTML = user.name;
       textUser.innerHTML = 'Users';
       datas.forEach(function (element) {
+        // created Elements
         var tr = document.createElement('tr');
         var id = document.createElement('td');
         var name = document.createElement('td');
         var year = document.createElement('td');
         var create = document.createElement('td');
+        var action = document.createElement('td');
+        var deleteBtn = document.createElement('button');
+        var updateBtn = document.createElement('button'); // InnerHTML
+
         id.innerHTML = element.id;
         name.innerHTML = element.name;
         year.innerHTML = element.year;
         create.innerHTML = element.create;
+        deleteBtn.innerHTML = 'Apagar';
+        updateBtn.innerHTML = 'Atualizar'; // Attribute 
+
+        tr.setAttribute('data-id', element.id);
+        tr.setAttribute('data-name', element.name);
+        tr.setAttribute('data-year', element.year);
+        tr.setAttribute('data-create', element.create); // AppendChild
+
         tr.appendChild(id);
         tr.appendChild(name);
         tr.appendChild(year);
         tr.appendChild(create);
-        tbody.appendChild(tr);
+        tr.appendChild(action);
+        action.appendChild(deleteBtn);
+        action.appendChild(updateBtn);
+        tbody.appendChild(tr); // Css ClassList
+
+        deleteBtn.classList.add('mr-2');
+        deleteBtn.classList.add('btn');
+        deleteBtn.classList.add('btn-danger');
+        updateBtn.classList.add('ml-2');
+        updateBtn.classList.add('btn');
+        updateBtn.classList.add('btn-info'); // AddEventListener
+
+        deleteBtn.addEventListener('click', function (event) {
+          deleteUser(tr);
+        });
+        updateBtn.addEventListener('click', function (event) {
+          updateUser(tr);
+        });
       });
     } else {
       nameUser.innerHTML = 'Precisa fazer o login!';
     }
   })["catch"](function (err) {
     nameUser.innerHTML = 'Erro no Servidor';
+  }); // Function AddEventListener
+
+  function deleteUser(trUser) {
+    var id = trUser.getAttribute('data-id');
+
+    if (id != undefined && !isNaN(id)) {
+      axios["delete"]('http://localhost:3000/user/' + id, axiosConfig).then(function (response) {
+        if (response.status == 200) {
+          alert('Apagado com Sucesso');
+          window.location.reload();
+        }
+      })["catch"](function (err) {
+        alert('Ocorreu um erro na hora de apagar!');
+      });
+    }
+  }
+
+  function updateUser(trUser) {
+    var id = trUser.getAttribute('data-id');
+    var userid = trUser.getAttribute('data-create');
+    var name = trUser.getAttribute('data-name');
+    var year = trUser.getAttribute('data-year');
+    document.getElementById('idUpdate').value = id;
+    document.getElementById('dataUpdate').value = userid;
+    document.getElementById('userUpdate').value = name;
+    document.getElementById('yearUpdate').value = year;
+  } // Create Update Users
+
+
+  var buttonSend = document.querySelector('#btnCreate');
+  buttonSend.addEventListener('click', function (e) {
+    var name = document.querySelector('#userCreate').value;
+    var year = document.querySelector('#yearCreate').value;
+
+    if (name != undefined && year != undefined) {
+      var users = {
+        name: name,
+        year: year
+      };
+      axios.post('http://localhost:3000/user/create', users, axiosConfig).then(function (response) {
+        if (response.status == 200) {
+          alert('Enviado com sucesso!');
+          window.location.reload();
+        }
+      })["catch"](function (err) {
+        alert('Ocorreu um erro!');
+        window.location.reload();
+      });
+    }
+  });
+  var buttonSendEdit = document.querySelector('#btnUpdate');
+  buttonSendEdit.addEventListener('click', function (e) {
+    var id = document.querySelector('#idUpdate').value;
+    var name = document.querySelector('#userUpdate').value;
+    var year = document.querySelector('#yearUpdate').value;
+    var users = {
+      name: name,
+      year: year
+    };
+    axios.put('http://localhost:3000/user/' + id, users, axiosConfig).then(function (response) {
+      if (response.status == 200) {
+        alert('Atualizado com sucesso!');
+        window.location.reload();
+      }
+    })["catch"](function (err) {
+      alert('Ocorreu um erro!');
+      window.location.reload();
+    });
   });
 }
 
