@@ -10,7 +10,7 @@ export default function Sign(Name, mail, password) {
     const email = ValidateEmail(mail);
     const name = ValidateName(Name);
     if(password != undefined && email != false && name != false){
-        axios.post('http://registration-api:3000/user/sign',{
+        axios.post('http://192.168.0.102:3000/user/sign',{
             name,
             email,
             password
