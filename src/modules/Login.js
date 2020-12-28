@@ -1,9 +1,6 @@
-import {
-    ValidateEmail
-} from './ValidateEmailName';
-import {
-    ValidateLogin
-} from './ ValidatePassword';
+import { ValidateEmail } from './ValidateEmailName';
+import { ValidateLogin } from './ ValidatePassword';
+
 const axiosConfig = {
     headers: {
         Authorization: `bearer ${localStorage.getItem('token') || ''}`
@@ -18,22 +15,18 @@ export default function Login(Email, Password) {
             email,
             password
         }).then(resp => {
-            if (resp.status) {
+            if (resp.status == 200) {
                 let token = resp.data.token;
                 localStorage.setItem('token', token);
                 axiosConfig.headers.Authorization = `bearer ${localStorage.getItem('token')}`;
-                // alert('Usuário Logado!!');
                 window.location.href = "index.html";
-            } else {
-                alert('Senha ou Email incorreto!!!');
-                // document.location.reload(false);
             }
         }).catch(err => {
-            alert('Erro ao Logar');
-            // document.location.reload(false);
+            alert('Senha ou Email incorreto!!!');
+            window.location.reload();
         })
     } else {
-        alert('Senha ou Email Vazios');
-        // document.location.reload(false);
+        alert('Senha ou E-mail Vazios');
+        window.location.reload();
     }
 }
