@@ -11,7 +11,7 @@ export default function Login(Email, Password) {
     const email = ValidateEmail(Email);
     const password = ValidateLogin(Password);
     if (email != false && password != false) {
-        axios.post('http://localhost:3000/user/login', {
+        axios.post('http://34.95.177.217:3000/user/login', {
             email,
             password
         }).then(resp => {
