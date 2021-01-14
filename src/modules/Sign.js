@@ -10,7 +10,7 @@ export default function Sign(Name, mail, password) {
     const email = ValidateEmail(mail);
     const name = ValidateName(Name);
     if(password != undefined && email != false && name != false){
-        axios.post('http://localhost:3003/user/sign',{
+        axios.post('https://register.api.wenedev.site/user/sign',{
             name,
             email,
             password

@@ -44,7 +44,7 @@ export default function Users(root) {
     createTh.innerHTML = 'USERID';
     actionTh.innerHTML = 'Action';
 
-    axios('http://localhost:3003/users', axiosConfig)
+    axios('https://register.api.wenedev.site/users', axiosConfig)
         .then(result => {
             if (result.status == 200) {
 
@@ -117,7 +117,7 @@ export default function Users(root) {
         function deleteUser(trUser) {
             let id = trUser.getAttribute('data-id')
             if (id != undefined && !isNaN(id)) {
-                axios.delete('http://localhost:3003/user/' + id, axiosConfig).then(response => {
+                axios.delete('https://register.api.wenedev.site/user/' + id, axiosConfig).then(response => {
                     if (response.status == 200) {
                         alert('Apagado com Sucesso')
                         window.location.reload()
@@ -148,7 +148,7 @@ export default function Users(root) {
                     name,
                     year
                 }
-                axios.post('http://localhost:3003/user/create', users, axiosConfig).then(response => {
+                axios.post('https://register.api.wenedev.site/user/create', users, axiosConfig).then(response => {
                     if (response.status == 200) {
                         alert('Enviado com sucesso!');
                         window.location.reload();
@@ -171,7 +171,7 @@ export default function Users(root) {
                 year
             }
 
-            axios.put('http://localhost:3003/user/' + id, users, axiosConfig).then(response => {
+            axios.put('https://register.api.wenedev.site/user/' + id, users, axiosConfig).then(response => {
                 if (response.status == 200) {
                     alert('Atualizado com sucesso!');
                     window.location.reload();
