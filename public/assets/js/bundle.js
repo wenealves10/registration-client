@@ -111,7 +111,7 @@ function Login(Email, Password) {
   var password = (0,_ValidatePassword__WEBPACK_IMPORTED_MODULE_1__.ValidateLogin)(Password);
 
   if (email != false && password != false) {
-    axios.post('http://34.95.177.217:3000/user/login', {
+    axios.post('http://localhost:3003/user/login', {
       email: email,
       password: password
     }).then(function (resp) {
@@ -155,7 +155,7 @@ function Sign(Name, mail, password) {
   var name = (0,_ValidateEmailName__WEBPACK_IMPORTED_MODULE_0__.ValidateName)(Name);
 
   if (password != undefined && email != false && name != false) {
-    axios.post('http://34.95.177.217:3000/user/sign', {
+    axios.post('http://localhost:3003/user/sign', {
       name: name,
       email: email,
       password: password
@@ -229,7 +229,7 @@ function Users(root) {
   yearTh.innerHTML = 'Year';
   createTh.innerHTML = 'USERID';
   actionTh.innerHTML = 'Action';
-  axios('http://34.95.177.217:3000/users', axiosConfig).then(function (result) {
+  axios('http://localhost:3003/users', axiosConfig).then(function (result) {
     if (result.status == 200) {
       var datas = result.data.data;
       var user = result.data.user;
@@ -292,7 +292,7 @@ function Users(root) {
     var id = trUser.getAttribute('data-id');
 
     if (id != undefined && !isNaN(id)) {
-      axios["delete"]('http://34.95.177.217:3000/user/' + id, axiosConfig).then(function (response) {
+      axios["delete"]('http://localhost:3003/user/' + id, axiosConfig).then(function (response) {
         if (response.status == 200) {
           alert('Apagado com Sucesso');
           window.location.reload();
@@ -325,7 +325,7 @@ function Users(root) {
         name: name,
         year: year
       };
-      axios.post('http://34.95.177.217:3000/user/create', users, axiosConfig).then(function (response) {
+      axios.post('http://localhost:3003/user/create', users, axiosConfig).then(function (response) {
         if (response.status == 200) {
           alert('Enviado com sucesso!');
           window.location.reload();
@@ -345,7 +345,7 @@ function Users(root) {
       name: name,
       year: year
     };
-    axios.put('http://34.95.177.217:3000/user/' + id, users, axiosConfig).then(function (response) {
+    axios.put('http://localhost:3003/user/' + id, users, axiosConfig).then(function (response) {
       if (response.status == 200) {
         alert('Atualizado com sucesso!');
         window.location.reload();
